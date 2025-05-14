@@ -1,0 +1,267 @@
+---
+title: "C comparision"
+output: html_notebook
+---
+
+
+```{r}
+library(ggplot2)
+library(jsonlite)
+library(tidyverse)
+library(dplyr)
+library(reshape2)
+library(forcats)
+library(ggtext)
+# library(RColorBrewer)
+library(khroma)
+
+```
+
+```{r}
+
+udedf = read.csv("csv/rmseUDE800.csv")
+gpdf = read.csv("csv/rmseGP800.csv")
+kdf = read.csv("csv/rmseKERNEL800.csv")
+
+# black, orange blue, gray
+best_colors <- c("GP" = "#4477AA", #purple
+                 "UDE" = "#228833",  #orange
+                 "KERNEL" = "#AA3377")  #blue
+
+row_comb = rbind(udedf, gpdf, kdf)
+# Define consistent order for x-axis
+method_levels <- c("UDE", "GP", "KERNEL") 
+updated_methods <- c("UDE"="UDE-NN", "GP"="DE-GP", "KERNEL"="DE-KERNEL")
+
+c_compare <- row_comb %>%
+  mutate(
+    method = factor(method, levels = method_levels),  # Set consistent levels
+    class = fct_reorder(method, rmseC, .fun = 'mean') # Reorder based on mean if needed
+  ) %>%
+  ggplot(aes(x = method, y = rmseC, fill = method)) + 
+  geom_boxplot() +
+  xlab("Methods") +
+  ylab("RMSE-C") +
+  coord_cartesian(ylim = c(0, 1.5))+
+  theme_bw() +
+  theme(
+    legend.position = "none",
+    axis.title = element_text(size = 24),  # Font size for axis labels
+    axis.text = element_text(size = 20)   # Font size for tick labels
+  )+
+  scale_x_discrete(labels = updated_methods) + # Update method
+  scale_fill_manual(values = best_colors) 
+ggsave("plots/c_compare800.png", c_compare, dpi=400)  
+
+
+# ----------------------------
+udedf = read.csv("csv/rmseUDE530.csv")
+gpdf = read.csv("csv/rmseGP530.csv")
+kdf = read.csv("csv/rmseKERNEL530.csv")
+
+row_comb = rbind(udedf, gpdf, kdf)
+
+c_compare <- row_comb %>%
+  mutate(
+    method = factor(method, levels = method_levels),  # Set consistent levels
+    class = fct_reorder(method, rmseC, .fun = 'mean') # Reorder based on mean if needed
+  ) %>%
+  ggplot(aes(x = method, y = rmseC, fill = method)) + 
+  geom_boxplot() +
+  xlab("Methods") +
+  ylab("RMSE-C") +
+  coord_cartesian(ylim = c(0, 1.5))+
+  theme_bw() +
+  theme(
+    legend.position = "none",
+    axis.title = element_text(size = 24),  # Font size for axis labels
+    axis.text = element_text(size = 20)   # Font size for tick labels
+  )+
+  scale_x_discrete(labels = updated_methods)+ # Update method
+  scale_fill_manual(values = best_colors) 
+
+ggsave("plots/c_compare530.png", c_compare, dpi=400)  
+
+udedf = read.csv("csv/rmseUDE204.csv")
+gpdf = read.csv("csv/rmseGP204.csv")
+kdf = read.csv("csv/rmseKERNEL204.csv")
+
+row_comb = rbind(udedf, gpdf, kdf)
+
+c_compare <- row_comb %>%
+  mutate(
+    method = factor(method, levels = method_levels),  
+    class = fct_reorder(method, rmseC, .fun = 'mean') 
+  ) %>%
+  ggplot(aes(x = method, y = rmseC, fill = method)) + 
+  geom_boxplot() +
+  xlab("Methods") +
+  ylab("RMSE-C") +
+  coord_cartesian(ylim = c(0, 1.5))+
+  theme_bw() +
+  theme(
+    legend.position = "none",
+    axis.title = element_text(size = 24),   
+    axis.text = element_text(size = 20)    
+  )+
+  scale_x_discrete(labels = updated_methods)+ # Update method
+  scale_fill_manual(values = best_colors)   
+
+ggsave("plots/c_compare204.png", c_compare, dpi=400)  
+
+```
+
+<!-- ======================================================= -->
+
+
+```{r}
+
+fscoredf = read.csv("csv/fscore_c.csv")
+# updated_methods <- c("UDE"="NN", "GP"="GP", "KERNEL"="KERNEL")
+
+df_long <- reshape2::melt(fscoredf, id.vars = "method", 
+                            variable.name = "regime", 
+                            value.name = "performance")
+
+shape_map <- c("UDE" = 16, "GP" = 17, "KERNEL" = 18)  # Different shapes
+# Create the scatter line plot
+# Define your custom mappings
+
+custom_linetypes <- c("GP" = "dashed", "KERNEL" = "dotted", "UDE" = "solid")
+custom_shapes <- c("GP" = 16, "KERNEL" = 17, "UDE" = 15)
+
+label_map <- c("regime1" = "Regime-I", "regime2" = "Regime-II", "regime3" = "Regime-III")
+
+
+fscore <- ggplot(df_long, aes(x = regime, y = performance, 
+                      group = method, linetype = method,
+                      color = method, shape=method)) +
+  geom_line(aes(linetype = method, color = method),size = 1.5) +  # Add lines connecting the points
+  scale_x_discrete(labels = label_map) +
+  geom_point(aes(shape = method, color = method),size = 5) +      # Add scatter points
+  labs( #title = "Performance Trends Across Regimes",
+       x = "",
+       y = "F-score",
+       color = "Method",
+       shape = "Method",
+       linetype = "Method") +
+  scale_color_manual(values = best_colors, labels = c("DE-GP", "DE-KERNEL", "**UDE-NN**")) +
+  scale_linetype_manual(values = custom_linetypes, labels = c("DE-GP", "DE-KERNEL", "**UDE-NN**")) +
+  scale_shape_manual(values = custom_shapes, labels = c("DE-GP", "DE-KERNEL", "**UDE-NN**")) +
+  guides(
+    linetype = guide_legend(order = 1),  # Ensure a single legend
+    color = guide_legend(order = 1),
+    shape = guide_legend(order = 1)
+    ) + 
+  theme_bw() +
+  # scale_x_discrete(labels = updated_methods)+
+  theme(
+        axis.title = element_text(size = 18),  # Font size for axis labels
+        axis.text = element_text(size = 18),
+        legend.text = element_markdown(size = 15),
+        legend.title = element_text(size = 18),
+        legend.position = c(0.8, 0.86),
+        # legend.background = element_rect(size=0.6,fill="white",color="black",linetype="solid")
+        ) 
+        
+ggsave("plots/fscores.png", fscore, width=8,height=5.6, dpi=600)  
+
+```
+
+
+```{r}
+cdf = read.csv("csv/c_pred.csv")
+
+# blue #0072B2
+# purple #2E2585
+# orange #D55E00
+# green #228833
+
+# Define dark colors
+best_colors <- c("GP" = "#4477AA", #purple
+                 "UDE_NN" = "#228833",  #orange
+                 "True_c" = "black",  #black
+                 "KERNEL" = "#AA3377")  #blue
+
+# Create a time column
+cdf$time <- 1:nrow(cdf)
+
+# Reshape to long format
+df_long <- cdf %>%
+  pivot_longer(cols = -time,  # All columns except 'time'
+               names_to = "group", 
+               values_to = "value")
+
+# Define line types for specific groups
+line_types <- c("True_c" = "dashed",     # Solid line for True_c
+                "UDE_NN" = "solid",     # Solid line for UDE_NN
+                "GP" = "dashed",        # Dashed line for GP
+                "KERNEL" = "dashed")   # Dot-dash line for KERNEL
+
+# label_names <- c("GP" = "UDE-GP",
+                  # "UDE_NN" = "UDE-NN",
+                  # "True_c" = "True harvest, c",
+                  # "KERNEL" = "UDE-Kernel")
+
+line_widths <- c("True_c" = 0.7, 
+                 "UDE_NN" = 1.6, 
+                 "GP" = 0.7, 
+                 "KERNEL" = 0.7)
+# Plot
+cp <- ggplot(df_long, aes(x=time, y=value, group=group)) +
+  
+  # Line plot - set color and size in aes()
+  geom_line(aes(color=group, size=group)) +
+  
+  # Add markers every 20 steps - set color and shape in aes()
+  geom_point(aes(color=group, shape=group), size = 2.4, stroke = 1.2, 
+             data = df_long %>% filter(time %% 40 == 0)) +
+  
+  # Define manual aesthetics for line size
+  scale_size_manual(values = line_widths, guide = "none") +
+  
+  scale_shape_manual(values = c("GP" = 16, 
+                               "UDE_NN" = 15, 
+                               "True_c" = 18, 
+                               "KERNEL" = 17),
+                     labels = updated_methods) +
+  
+  scale_color_manual(values = best_colors, 
+                     labels = updated_methods) +
+  
+  # Combine legends - this is the key change
+  guides(color = guide_legend(title = "Method", 
+                             override.aes = list(
+                               size = 3, 
+                               stroke = 1.1,
+                               linetype = "solid")),
+         shape = guide_legend(title = "Method")) +
+  
+  # The crucial line to merge legends
+  theme(legend.position = "top",
+        legend.box = "horizontal",
+        legend.title = element_text(size = 20),
+        legend.text = element_markdown(size = 16),
+        axis.title = element_text(size = 18),
+        axis.text = element_text(size = 16)) +
+  
+  # Labels
+  labs(
+    x = "Time",
+    y = "Predicted unobserved parameter") +
+  
+  theme_bw()+
+  theme(
+    legend.position = c(0.3, 0.98),
+    legend.justification = c(1, 1),
+    axis.title = element_text(size = 18),
+    axis.text = element_text(size = 16),
+    legend.text = element_markdown(size = 16),
+    legend.title = element_text(size = 20)
+  )
+
+
+ggsave("plots/c_hat.png", cp, width=8,height=5.6, dpi=600) 
+```
+
+

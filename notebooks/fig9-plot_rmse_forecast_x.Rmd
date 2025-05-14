@@ -1,0 +1,281 @@
+---
+title: "Plot forecast evaulations"
+output: html_notebook
+---
+
+```{r}
+library(ggplot2)
+library(jsonlite)
+library(tidyverse)
+library(dplyr)
+library(reshape2)
+library(forcats)
+library(ggtext)
+library(RColorBrewer)
+
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+Read files:
+```{r}
+udedf800 = read.csv("csv/rmseUDE800.csv")
+gpdf800 = read.csv("csv/rmseGP800.csv")
+kdf800 = read.csv("csv/rmseKERNEL800.csv")
+ardf800 = read.csv("outputs/arima/results_800.csv")
+ldf800 = read.csv("outputs/lstm/results_800.csv")
+
+udedf800 <- udedf800 %>% select(-rmseC)
+gpdf800 <- gpdf800 %>% select(-rmseC)
+kdf800 <- kdf800 %>% select(-rmseC)
+
+ldf800 <- ldf800 %>% select(-opt_time)
+ardf800 <- ardf800 %>% select(-AutoAR_time)
+
+```
+
+head(udedf800)
+
+  
+```{r}
+comb800 = rbind(udedf800, gpdf800, kdf800, ardf800, ldf800)
+
+df <- comb800[c('method','rmse1', 'rmse5', 'rmse10', 'rmse20')]
+# Reshape data to long format
+df_long <- pivot_longer(
+  df,
+  cols = starts_with("rmse"),  # Only include the RMSE metrics
+  names_to = "metric",  # New column for metric names
+  values_to = "rmse_value"  # New column for RMSE values
+)
+# View the reshaped data
+#print(df_long)
+```
+
+
+
+```{r}
+# Reorder x-axis labels (metric)
+df_long$metric <- factor(df_long$metric, levels = c("rmse1", "rmse5", "rmse10", "rmse20"))
+
+# dark_C <- brewer.pal(n = 8, name = "Dark2")
+my_colors <- c( "ARIMA" = "#CCBB44",
+                "GP" = "#4477AA",
+                "KERNEL" = "#AA3377",
+                "LSTM" = "#BBBBBB",
+                "UDE" = "#228833"
+              )
+
+m_labels <- c("ARIMA", "DE-GP", "DE-KERNEL", "LSTM", "**UDE-NN**")
+
+```
+
+
+Stacked Box plot
+```{r}
+# Stacked Boxplot with Methods (grouped and filled by method)
+sbp <- ggplot(df_long, aes(x = metric, y = rmse_value, fill = method)) +
+        geom_boxplot(outlier.shape = 16, outlier.color = "black") +
+        labs(
+          #title = "RMSE Metrics by Method with Stacked Boxplots",
+          x = "RMSE for timesteps",
+          y = "RMSE Value (log scale)",
+          fill = "Method"
+        ) +
+        scale_fill_manual(
+          values = my_colors,
+          labels = m_labels  # Optional: Bold UDE using 
+        ) +
+        scale_y_log10(limits = c(0.01,max(df_long$rmse_value) * 1.2))+
+        theme_bw() +
+        theme(
+          axis.text.x = element_text(size = 18),
+          axis.text.y = element_text(size = 18),
+          axis.title = element_text(size = 20),
+          axis.text = element_text(size = 20),
+          #legend.position = "none",
+          legend.text = element_markdown(size = 22)
+        )
+
+ggsave("plots/stacked_forecast800.png", sbp, dpi=600)  
+
+```
+
+=====================================================================================
+
+```{r}
+udedf800 = read.csv("csv/rmseUDE800.csv")
+gpdf800 = read.csv("csv/rmseGP800.csv")
+kdf800 = read.csv("csv/rmseKERNEL800.csv")
+ardf800 = read.csv("outputs/arima/results_800.csv")
+ldf800 = read.csv("outputs/lstm/results_800.csv")
+
+udedf800 <- udedf800 %>% select(-rmseC)
+gpdf800 <- gpdf800 %>% select(-rmseC)
+kdf800 <- kdf800 %>% select(-rmseC)
+
+ldf800 <- ldf800 %>% select(-opt_time)
+ardf800 <- ardf800 %>% select(-AutoAR_time)
+
+comb800 = rbind(udedf800, gpdf800, kdf800, ardf800, ldf800)
+
+df <- comb800[c('method','rmse1', 'rmse5', 'rmse10', 'rmse20')]
+# Reshape data to long format
+df_long <- pivot_longer(
+  df,
+  cols = starts_with("rmse"),  # Only include the RMSE metrics
+  names_to = "metric",  # New column for metric names
+  values_to = "rmse_value"  # New column for RMSE values
+)
+
+df_long$metric <- factor(df_long$metric, levels = c("rmse1", "rmse5", "rmse10", "rmse20"))
+# Stacked Boxplot with Methods (grouped and filled by method)
+sbp <- ggplot(df_long, aes(x = metric, y = rmse_value, fill = method)) +
+        geom_boxplot(outlier.shape = 16, outlier.color = "black") +
+        labs(
+          #title = "RMSE Metrics by Method with Stacked Boxplots",
+          x = "",
+          y = "",
+          fill = "Methods"
+        ) +
+        scale_fill_manual(
+          values = my_colors,
+          labels = m_labels  # Optional: Bold UDE using 
+        ) +
+        scale_y_log10(limits = c(0.01,10.5))+
+        theme_bw() +
+        theme(
+          axis.text.x = element_text(size = 18),
+          axis.text.y = element_text(size = 18),
+          axis.title = element_text(size = 20),
+          axis.text = element_text(size = 20),
+          legend.title = element_markdown(size = 26),
+          legend.key.spacing.y  = unit(0.5, "cm"),
+          legend.text = element_markdown(size = 18)  # Enable markdown for bold text in legend
+        )
+
+ggsave("plots/stacked_forecast800.png", sbp, dpi=600)  
+```
+
+=====================================================================================
+
+Lets do this for 530:
+```{r}
+udedf = read.csv("csv/rmseUDE530.csv")
+gpdf = read.csv("csv/rmseGP530.csv")
+kdf = read.csv("csv/rmseKERNEL530.csv")
+ardf = read.csv("outputs/arima/results_530.csv")
+ldf = read.csv("outputs/lstm/results_530.csv")
+
+udedf <- udedf %>% select(-rmseC)
+gpdf <- gpdf %>% select(-rmseC)
+kdf <- kdf %>% select(-rmseC)
+
+ldf <- ldf %>% select(-opt_time)
+ardf <- ardf %>% select(-AutoAR_time)
+
+comb = rbind(udedf, gpdf, kdf, ardf, ldf)
+
+df <- comb[c('method','rmse1', 'rmse5', 'rmse10', 'rmse20')]
+# Reshape data to long format
+df_long <- pivot_longer(
+  df,
+  cols = starts_with("rmse"),  # Only include the RMSE metrics
+  names_to = "metric",  # New column for metric names
+  values_to = "rmse_value"  # New column for RMSE values
+)
+
+# Reorder x-axis labels (metric)
+df_long$metric <- factor(df_long$metric, levels = c("rmse1", "rmse5", "rmse10", "rmse20"))
+
+# Stacked Boxplot with Methods (grouped and filled by method)
+sbp <- ggplot(df_long, aes(x = metric, y = rmse_value, fill = method)) +
+        geom_boxplot(outlier.shape = 16, outlier.color = "black") +
+        labs(
+          #title = "RMSE Metrics by Method with Stacked Boxplots",
+          x = "",
+          y = "",
+          fill = "Methods"
+        ) +
+        scale_fill_manual(
+          values = my_colors,
+          labels = m_labels  # Optional: Bold UDE using 
+        ) +
+        scale_y_log10(limits = c(0.01,10.5)) +   # Apply log scale to the y-axis
+          #limits = c(0.01, max(df_long$rmse_value) * 1.2)  # Set y-axis limits for log scale
+        theme_bw() +
+        theme(
+          axis.text.x = element_text(size = 18),
+          axis.text.y = element_text(size = 18),
+          axis.title = element_text(size = 20),
+          axis.text = element_text(size = 20),
+          #legend.position = "none",
+          legend.text = element_markdown(size = 18)  # Enable markdown for bold text in legend
+        )
+
+ggsave("plots/stacked_forecast530.png", sbp, dpi=600)  
+```
+
+
+
+Lets do this for 204:
+```{r}
+udedf = read.csv("csv/rmseUDE204.csv")
+gpdf = read.csv("csv/rmseGP204.csv")
+kdf = read.csv("csv/rmseKERNEL204.csv")
+ardf = read.csv("outputs/arima/results_204.csv")
+ldf = read.csv("outputs/lstm/results_204.csv")
+
+udedf <- udedf %>% select(-rmseC)
+gpdf <- gpdf %>% select(-rmseC)
+kdf <- kdf %>% select(-rmseC)
+
+ldf <- ldf %>% select(-opt_time)
+ardf <- ardf %>% select(-AutoAR_time)
+
+comb = rbind(udedf, gpdf, kdf, ardf, ldf)
+
+df <- comb[c('method','rmse1', 'rmse5', 'rmse10', 'rmse20')]
+# Reshape data to long format
+df_long <- pivot_longer(
+  df,
+  cols = starts_with("rmse"),  # Only include the RMSE metrics
+  names_to = "metric",  # New column for metric names
+  values_to = "rmse_value"  # New column for RMSE values
+)
+
+# Reorder x-axis labels (metric)
+df_long$metric <- factor(df_long$metric, levels = c("rmse1", "rmse5", "rmse10", "rmse20"))
+
+# Stacked Boxplot with Methods (grouped and filled by method)
+sbp <- ggplot(df_long, aes(x = metric, y = rmse_value, fill = method)) +
+        geom_boxplot(outlier.shape = 16, outlier.color = "black") +
+        labs(
+          #title = "RMSE Metrics by Method with Stacked Boxplots",
+          x = "",
+          y = "RMSE Value (log scale)",
+          fill = "Method"
+        ) +
+        scale_fill_manual(
+          values = my_colors,
+          labels = m_labels  # Optional: Bold UDE using
+        ) +
+        scale_y_log10(limits = c(0.01,10.5))+
+        #scale_y_log10(   # Apply log scale to the y-axis
+         # limits = c(0.01, max(df_long$rmse_value) * 1.2),  # Set y-axis limits for log scale
+          #expand = c(0, 0)  # Remove extra space above and below boxplots
+        #)
+        theme_bw() +
+        theme(
+          axis.text.x = element_text(size = 18),
+          axis.text.y = element_text(size = 18),
+          axis.title = element_text(size = 20),
+          axis.text = element_text(size = 20),
+          #legend.position = "none",
+          legend.text = element_markdown(size = 18)  # Enable markdown for bold text in legend
+        )
+
+ggsave("plots/stacked_forecast204.png", sbp, dpi=600)  
+```
+
+
