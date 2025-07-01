@@ -70,7 +70,7 @@ This project is licensed under the **MIT License** – see the [LICENSE](LICENSE
 
 ## Citation
 If you use this code in your work, please cite:
-> Rathore, K.J., Buckner, J.H., Meunier, Z.D., Esquivel, J.A., & Watson, J.R. (2025). *Predicting Regime Shifts in Social-Ecological Systems Using Scientific Machine Learning*. Journal of the Royal Society Interface.
+> Rathore, K.J., Buckner, J.H., Meunier, Z.D., Esquivel, J.A., & Watson, J.R. (2025). *Predicting Regime Shifts in Social-Ecological Systems Using Scientific Machine Learning*.
 
 ## Acknowledgments
 This paper is a product of the model-enabled machine learning for ecology working group, which includes the authors of the paper, Lisa McManus, Ariel Greiner, Nathan Fitzpatrick, Cheyenne Jarman, and Emerson Arehart, all of whom provided valuable contributions to the intellectual environment that led to this paper. We also thank Chris Rackauckas for help working with Julia Scientific Machine Learning tools and the Hawaiʻi Institute of Marine Biology for hosting a workshop where the ideas for this project were developed.
