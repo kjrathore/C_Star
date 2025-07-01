@@ -13,12 +13,12 @@ C_Star provides the supporting code for the paper *Predicting Regime Shifts in S
 ## Repository Structure
 ```
 ├── .vscode/                # Configuration files
-├── UDE_activations/        # Activation functions used in modeling
+├── UDE_activations/        # Evaluating Activation functions used in modeling
 ├── csv/                    # Data files
 ├── env/                    # Environment settings
 ├── notebooks/              # Jupyter notebooks for analysis
 ├── plots/                  # Visualization outputs
-├── scripts/                # Python scripts for processing
+├── scripts/                # Julia scripts for training models
 ├── .gitignore              # Git configuration
 ├── LICENSE                 # Project license
 ├── README.md               # Project documentation
@@ -34,14 +34,18 @@ C_Star provides the supporting code for the paper *Predicting Regime Shifts in S
    ```sh
    cd C_Star
    ```
-3. Install dependencies:
+3. Activate env in Julia and instantiate packages:
    ```sh
-   pip install -r requirements.txt
+   julia --project=env
+   or 
+   julia
+   ]
+   activate env
    ```
 
 ### Usage
+- Execute scripts in the `scripts/` directory for specific model training tasks.
 - Run analysis notebooks to explore forecasting methodologies.
-- Execute scripts in the `scripts/` directory for specific tasks.
 - View plots in the `plots/` directory for visualizing model predictions.
 
 ## Results
@@ -71,4 +75,4 @@ If you use this code in your work, please cite:
 ## Acknowledgments
 This paper is a product of the model-enabled machine learning for ecology working group, which includes the authors of the paper, Lisa McManus, Ariel Greiner, Nathan Fitzpatrick, Cheyenne Jarman, and Emerson Arehart, all of whom provided valuable contributions to the intellectual environment that led to this paper. We also thank Chris Rackauckas for help working with Julia Scientific Machine Learning tools and the Hawaiʻi Institute of Marine Biology for hosting a workshop where the ideas for this project were developed.
 ## Funding: 
-This research was supported by the National Science Foundation awards #2233982 and #2233983 to JRW and LCM on Model-Enabled Machine Learning to Predict Ecosystem Regime Shifts.}
+This research was supported by the National Science Foundation awards #2233982 and #2233983 to JRW and LCM on Model-Enabled Machine Learning to Predict Ecosystem Regime Shifts.
