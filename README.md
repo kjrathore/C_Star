@@ -48,6 +48,9 @@ C_Star provides the supporting code for the paper *Predicting Regime Shifts in S
 
 ### Usage
 - Execute scripts in the `scripts/` directory for specific model training tasks.
+  ```sh
+   julia scripts/1-UDE_approx.jl <train_size> <seed>
+   ```
 - Run analysis notebooks to explore forecasting methodologies.
 - View plots in the `plots/` directory for visualizing model predictions.
 
