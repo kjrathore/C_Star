@@ -1,13 +1,13 @@
-# Predicting Regime Shifts in Social-Ecological Systems Using Scientific Machine Learning
+# Predicting unobserved driver of regime shifts in social-ecological systems with universal dynamic equations
 
 **Abstract**
-Ecosystems around the world are expected to exhibit regime shifts as temperatures rise and other climatic and anthropogenic perturbations erode the resilience of present-day states. Forecasting these nonlinear ecosystem dynamics can help stakeholders to prepare for these rapid changes. One major challenge is that regime shifts can be difficult to predict when they are driven by unobserved factors. In this paper, we advance scientific machine learning methods, specifically universal dynamic equations (UDEs), to identify changes in an unobserved bifurcation parameter and predict ecosystem regime shifts. We demonstrate this approach using simulated data created from a dynamical model of an ecological population experiencing loss due to unobserved extraction or harvest. This could be, for example, illegal fishing from a fishery or poaching in a game reserve. We show that UDEs can accurately identify changes in the unobserved bifurcation parameter, in our case the slowly increasing harvest rate, and predict when a regime shift will occur. Compared to traditional early warning indicators, our UDE approach provides more reliable predictions with fewer data and forecasts with less uncertainty. This approach provides a new set of methods for ecosystem stakeholders and managers to identify unobserved changes in key parameters that drive nonlinear change.
+Ecosystems around the world are anticipated to undergo regime shifts as temperatures rise and other climatic and anthropogenic perturbations erode the resilience of present-day states. Forecasting these nonlinear ecosystem dynamics can help stakeholders to prepare for the associated rapid changes. One major challenge is that regime shifts can be difficult to predict when they are driven by unobserved factors. In this paper, we advance scientific machine learning methods, specifically universal dynamic equations (UDEs), to identify changes in an unobserved bifurcation parameter and predict ecosystem regime shifts. We demonstrate this approach using simulated data created from a dynamic model of a species population experiencing loss due to unobserved extraction or harvest. This could be, for example, illegal fishing from a fishery or unreported poaching in a game reserve. We show that UDEs can accurately identify changes in the unobserved bifurcation parameter, in our case the slowly increasing harvest rate, and predict when a regime shift might occur. Compared to alternative forecasting methods, our UDE approach provides more reliable short-term predictions with fewer data. This approach provides a new set of methods for ecosystem stakeholders and managers to identify unobserved changes in key parameters that drive nonlinear change.
 
 ## Overview
 C_Star provides the supporting code for the paper *Predicting Regime Shifts in Social-Ecological Systems Using Scientific Machine Learning*. The research applies Universal Differential Equations (UDEs) to identify unobserved bifurcation parameters, specifically harvest rate, and forecast critical regime shifts in ecological systems. This methodology enhances predictive accuracy compared to traditional early warning indicators.
 
 ## Features
-- **Scientific Machine Learning (SciML) Methods**: Implements UDEs for identifying unseen parameters affecting regime shifts.
+- **Scientific Machine Learning (SciML) Methods**: Implements UDEs for identifying unobserved parameter affecting regime shifts.
 - **Forecasting Ecosystem Dynamics**: Uses simulated data to predict critical transition points.
 - **Comparative Analysis**: Evaluates UDE performance against Bayesian and Kernel function approaches.
 
@@ -71,7 +71,7 @@ This project is licensed under the **MIT License** – see the [LICENSE](LICENSE
 
 ## Citation
 If you use this code in your work, please cite:
-> Rathore, K.J., Buckner, J.H., Meunier, Z.D., Esquivel, J.A., & Watson, J.R. (2025). *Predicting Regime Shifts in Social-Ecological Systems Using Scientific Machine Learning*.
+> Rathore, K.J., Buckner, J.H., Meunier, Z.D., Esquivel, J.A., & Watson, J.R. (2025). *Predicting unobserved driver of regime shifts in social-ecological systems with universal dynamic equations*.
 
 ## Acknowledgments
 This paper is a product of the model-enabled machine learning for ecology working group, which includes the authors of the paper, Lisa McManus, Ariel Greiner, Nathan Fitzpatrick, Cheyenne Jarman, and Emerson Arehart, all of whom provided valuable contributions to the intellectual environment that led to this paper. We also thank Chris Rackauckas for help working with Julia Scientific Machine Learning tools and the Hawaiʻi Institute of Marine Biology for hosting a workshop where the ideas for this project were developed.
