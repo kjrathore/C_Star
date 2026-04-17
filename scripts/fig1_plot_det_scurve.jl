@@ -17,7 +17,7 @@ h = 1.0
 # rts = roots(p)
 # println(rts)
 
-eqs = zeros(1001,4)
+eqs = zeros(400,4)
 c_vals = collect(range(0.0, 4.0, length=1001))
 # FIND EQUILIBRIA
 for (i, c_val) in enumerate(c_vals)
