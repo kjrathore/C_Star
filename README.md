@@ -6,7 +6,7 @@ Ecosystems around the world are anticipated to undergo regime shifts as temperat
 ## Overview
 C_Star provides the supporting code for the paper *Predicting Regime Shifts in Social-Ecological Systems Using Scientific Machine Learning*. The research applies Universal Differential Equations (UDEs) to identify unobserved bifurcation parameters, specifically harvest rate, and forecast critical regime shifts in ecological systems. This methodology enhances predictive accuracy compared to traditional early warning indicators.
 
-![Alt text](plots/CStarframework.svg)
+![Alt text](plots/CStarframework.png)
 
 ## Features
 - **Scientific Machine Learning (SciML) Methods**: Implements UDEs for identifying unobserved parameter affecting regime shifts.
