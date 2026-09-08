@@ -9,7 +9,7 @@ using LaTeXStrings
 rng = Random.seed!(42) #StableRNG(1111)
 
 u0 = Float32[5.0; 0.0]
-datasize = 1000
+datasize = 400
 
 function tilman_system(u, datasize)
     x = zeros(datasize)
